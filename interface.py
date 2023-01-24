@@ -14,13 +14,14 @@ import numpy as np
 import joblib as joblib
 import pandas as pd 
 from keras.models import load_model
+#kkkkkk
 
 #create the main window
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
-
+print('hello')
 class App(customtkinter.CTk):
 
     WIDTH = 780
@@ -131,24 +132,29 @@ class App(customtkinter.CTk):
         self.label.grid(row=4, column=1, pady=10, padx=20)
         
         
-
+    def prob(self,pred):
+        if pred>0.5 :
+            pred=1
+        else:
+            pred=0
+        return pred
   
     def classify(self,filename):
         model = load_model('model1_catsVSdogs_10epoch.h5')
         #dictionary to label all traffic signs class.
         classes = { 
-        0:'its a cat',
-        1:'its a dog',
+        1:'its a cat',
+        0:'its a dog',
  
         }
         global label_packed
         image = Image.open(filename)
-        image = image.resize((300,300))
+        image = image.resize((64,64))
         image = np.expand_dims(image, axis=0)
         image = np.array(image)
         image = image/255
         pred = model.predict([image])[0]
-        classes_x=np.argmax(pred)
+        classes_x=self.prob(pred[0])
         sign = classes[classes_x]
         print(sign)
         
